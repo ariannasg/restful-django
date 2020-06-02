@@ -63,6 +63,8 @@ class ProductCreate(CreateAPIView):
         # TODO: apply this validation on update
         try:
             if price is not None and float(price) <= 0.0:
+                # The ValidationError exception can be raised with a
+                # field mapping using a dict
                 raise ValidationError({'price': 'must be above $0.0'})
         except ValueError:
             raise ValidationError({'price': 'must to be a number'})
@@ -70,6 +72,8 @@ class ProductCreate(CreateAPIView):
         return super().create(request, *args, **kwargs)
 
 
+# The generic RetrieveUpdateDestroyAPIView combines the “get”, “put”, “patch”,
+# and “delete” HTTP methods into one API view.
 class ProductRetrieveUpdateDestroy(RetrieveUpdateDestroyAPIView):
     queryset = Product.objects.all()
     lookup_field = 'id'
