@@ -47,6 +47,8 @@ class ProductSerializer(serializers.ModelSerializer):
     # We're going to override the update method, so that we can make use of
     # the warranty field. If a warranty file is supplied,
     # we're going to add it to the description of the product.
+    # we can use write-only fields when a field is being written to and
+    # the data can be used in other model fields.
     warranty = serializers.FileField(write_only=True, default=None)
 
     class Meta:
