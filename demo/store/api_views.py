@@ -60,7 +60,6 @@ class ProductCreate(CreateAPIView):
     def create(self, request, *args, **kwargs):
         # add the validation of the price for avoiding creating free products
         price = self.request.data.get('price')
-        # TODO: apply this validation on update
         try:
             if price is not None and float(price) <= 0.0:
                 # The ValidationError exception can be raised with a

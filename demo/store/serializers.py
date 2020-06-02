@@ -4,6 +4,8 @@ from store.models import Product, ShoppingCartItem
 
 
 class CartItemSerializer(serializers.ModelSerializer):
+    quantity = serializers.IntegerField(min_value=1, max_value=100)
+
     class Meta:
         model = ShoppingCartItem
         fields = ('product', 'quantity')
@@ -22,6 +24,10 @@ class ProductSerializer(serializers.ModelSerializer):
     # For other fields, it will use the Get "underscore" as a prefix to the
     # field name.
     cart_items = serializers.SerializerMethodField()
+    # thanks to this we could delete the validation on the creation api view.
+    # this validation will be applied on the update too
+    price = serializers.DecimalField(min_value=1.0, max_value=100000,
+                                     max_digits=None, decimal_places=2)
 
     class Meta:
         model = Product
