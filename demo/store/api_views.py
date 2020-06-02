@@ -9,6 +9,9 @@ from store.models import Product
 from store.serializers import ProductSerializer
 
 
+# Page number and limit offset pagination are good for small- to medium-sized
+# data sets. However, only cursor pagination (which uses the databases cursor)
+# is efficient enough for large data sets.
 class ProductsPagination(LimitOffsetPagination):
     default_limit = 10
     max_limit = 100
