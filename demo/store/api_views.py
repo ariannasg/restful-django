@@ -1,9 +1,10 @@
 #!usr/bin/env python3
+from django.core.cache import cache
 from django.utils import timezone
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.exceptions import ValidationError
 from rest_framework.filters import SearchFilter
-from rest_framework.generics import ListAPIView, CreateAPIView
+from rest_framework.generics import ListAPIView, CreateAPIView, DestroyAPIView
 from rest_framework.pagination import LimitOffsetPagination
 
 from store.models import Product
@@ -66,3 +67,18 @@ class ProductCreate(CreateAPIView):
             raise ValidationError({'price': 'must to be a number'})
 
         return super().create(request, *args, **kwargs)
+
+
+class ProductDestroy(DestroyAPIView):
+    queryset = Product.objects.all()
+    lookup_field = 'id'
+
+    # in a real-world scenario we'll prob need to clear all the cache
+    # linked to this product that's being destroyed
+    def delete(self, request, *args, **kwargs):
+        product_id = self.request.data.get('id')
+        response = super().delete(request, *args, **kwargs)
+        # if object was deleted successfully, remove all associated cache
+        if response.status_code == 204:
+            cache.delete(f'product_data_{product_id}')
+        return response
