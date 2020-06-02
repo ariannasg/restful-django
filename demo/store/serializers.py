@@ -38,12 +38,22 @@ class ProductSerializer(serializers.ModelSerializer):
         input_formats=['%I:%M %p %d %B %Y'], format=None, allow_null=True,
         help_text='Accepted format is "12:01 PM 16 April 2019',
         style={'input_type': 'text', 'placeholder': '12:01 AM 28 July 2019'})
+    photo = serializers.ImageField(default=None)
+    # We're going to allow the uploading of a warranty file for a product.
+    # We use the file field for this, but since the product model does not
+    # have a warranty file field in the model itself, we're going to be adding
+    # the write-only configuration option. This means that when we write to
+    # the field the data does not get saved to the model.
+    # We're going to override the update method, so that we can make use of
+    # the warranty field. If a warranty file is supplied,
+    # we're going to add it to the description of the product.
+    warranty = serializers.FileField(write_only=True, default=None)
 
     class Meta:
         model = Product
         fields = ('id', 'name', 'description', 'price',
                   'sale_start', 'sale_end', 'is_on_sale', 'current_price',
-                  'cart_items')
+                  'cart_items', 'photo', 'warranty')
 
     def get_cart_items(self, instance):
         items = ShoppingCartItem.objects.filter(product=instance)
@@ -51,6 +61,17 @@ class ProductSerializer(serializers.ModelSerializer):
         # serialized or whether a list serializer is automatically created
         # to serialize a collection of cart items.
         return CartItemSerializer(items, many=True).data
+
+    # Validated data in the update method is the data that will be used to
+    # update the model. It is safe to access because it is already passed
+    # through the validation process.
+    def update(self, instance, validated_data):
+        if validated_data.get('warranty', None):
+            instance.description += '\n\nWarranty Information:\n'
+            instance.description += b'; '.join(
+                validated_data['warranty'].readlines()
+            ).decode()
+        return instance
 
 
 # In order to gather daily, weekly, or monthly product and shopping cart data
