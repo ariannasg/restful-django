@@ -51,3 +51,15 @@ class ProductSerializer(serializers.ModelSerializer):
         # serialized or whether a list serializer is automatically created
         # to serialize a collection of cart items.
         return CartItemSerializer(items, many=True).data
+
+
+# In order to gather daily, weekly, or monthly product and shopping cart data
+# for our sales report, we need to create a new serializer that uses composite
+# fields. This won't be a model serializer but just a plain serializer.
+class ProductStatsSerializer(serializers.Serializer):
+    # this is a composite of a composite field
+    stats = serializers.DictField(
+        child=serializers.ListField(
+            child=serializers.IntegerField()
+        )
+    )

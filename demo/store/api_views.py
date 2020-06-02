@@ -5,11 +5,12 @@ from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.exceptions import ValidationError
 from rest_framework.filters import SearchFilter
 from rest_framework.generics import ListAPIView, CreateAPIView, \
-    RetrieveUpdateDestroyAPIView
+    RetrieveUpdateDestroyAPIView, GenericAPIView
 from rest_framework.pagination import LimitOffsetPagination
+from rest_framework.response import Response
 
 from store.models import Product
-from store.serializers import ProductSerializer
+from store.serializers import ProductSerializer, ProductStatsSerializer
 
 
 # Page number and limit offset pagination are good for small- to medium-sized
@@ -98,3 +99,22 @@ class ProductRetrieveUpdateDestroy(RetrieveUpdateDestroyAPIView):
                 'price': product['price']
             })
         return response
+
+
+# Composite fields are highly useful when you're trying to return
+# data that needs to be structured in a specific way that may not map to any
+# model.
+class ProductStats(GenericAPIView):
+    lookup_field = 'id'
+    serializer_class = ProductStatsSerializer
+    queryset = Product.objects.all()
+
+    def get(self, request, format=None, id=None):
+        obj = self.get_object()
+        serializer = ProductStatsSerializer({
+            'stats': {
+                '2019-01-01': [5, 10, 15],
+                '2019-01-02': [20, 1, 1]
+            }
+        })
+        return Response(serializer.data)
