@@ -49,6 +49,31 @@ Practicing Django by:
 - Checked http://127.0.0.1:8000/
 - Checked http://127.0.0.1:8000/admin using the super user credentials
 
+## Using the Django shell
+Example of using the django shell for rapid prototyping of a serializer class:
+   
+    (restful-django) ➜  demo git:(master) ✗ python3 manage.py shell
+    
+    Python 3.8.3 (v3.8.3:6f8c8320e9, May 13 2020, 16:29:34) 
+    [Clang 6.0 (clang-600.0.57)] on darwin
+    Type "help", "copyright", "credits" or "license" for more information.
+    (InteractiveConsole)
+    >>> from store.models import Product
+    >>> product = Product.objects.all()[0]
+    >>> product
+    <Product object (1) "Mineral Water Strawberry">
+    >>> from store.serializers import ProductSerializer
+    >>> serializer = ProductSerializer()
+    >>> data = serializer.to_representation(product)
+    >>> data
+    OrderedDict([('id', 1), ('name', 'Mineral Water Strawberry'), ('description', 'Natural-flavored strawberry with an anti-oxidant kick.'), ('price', 1.0), ('sale_start', None), ('sale_end', None), ('is_on_sale', False), ('current_price', 1.0)])
+    >>> from rest_framework.renderers import JSONRenderer
+    >>> renderer = JSONRenderer()
+    >>> renderer.render(data)
+    b'{"id":1,"name":"Mineral Water Strawberry","description":"Natural-flavored strawberry with an anti-oxidant kick.","price":1.0,"sale_start":null,"sale_end":null,"is_on_sale":false,"current_price":1.0}'
+    >>> 
+    
+
 ## Beyond the course activities
 Things that I added/modified which weren't part of the course:
 
