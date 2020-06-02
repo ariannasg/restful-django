@@ -4,7 +4,8 @@ from django.utils import timezone
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.exceptions import ValidationError
 from rest_framework.filters import SearchFilter
-from rest_framework.generics import ListAPIView, CreateAPIView, DestroyAPIView
+from rest_framework.generics import ListAPIView, CreateAPIView, \
+    RetrieveUpdateDestroyAPIView
 from rest_framework.pagination import LimitOffsetPagination
 
 from store.models import Product
@@ -59,7 +60,7 @@ class ProductCreate(CreateAPIView):
     def create(self, request, *args, **kwargs):
         # add the validation of the price for avoiding creating free products
         price = self.request.data.get('price')
-
+        # TODO: apply this validation on update
         try:
             if price is not None and float(price) <= 0.0:
                 raise ValidationError({'price': 'must be above $0.0'})
@@ -69,9 +70,10 @@ class ProductCreate(CreateAPIView):
         return super().create(request, *args, **kwargs)
 
 
-class ProductDestroy(DestroyAPIView):
+class ProductRetrieveUpdateDestroy(RetrieveUpdateDestroyAPIView):
     queryset = Product.objects.all()
     lookup_field = 'id'
+    serializer_class = ProductSerializer
 
     # in a real-world scenario we'll prob need to clear all the cache
     # linked to this product that's being destroyed
@@ -81,4 +83,15 @@ class ProductDestroy(DestroyAPIView):
         # if object was deleted successfully, remove all associated cache
         if response.status_code == 204:
             cache.delete(f'product_data_{product_id}')
+        return response
+
+    def update(self, request, *args, **kwargs):
+        response = super().update(request, *args, **kwargs)
+        if response.status_code == 200:
+            product = response.data
+            cache.set(f"product_data_{product['id']}", {
+                'name': product['name'],
+                'description': product['description'],
+                'price': product['price']
+            })
         return response
