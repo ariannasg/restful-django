@@ -29,12 +29,14 @@ class ProductSerializer(serializers.ModelSerializer):
     price = serializers.DecimalField(min_value=1.0, max_value=100000,
                                      max_digits=None, decimal_places=2)
     # The output format is set to none so that the fields are always DateTime
-    # objects
+    # objects. required false will allow not setting them on creation
     sale_start = serializers.DateTimeField(
+        required=False,
         input_formats=['%I:%M %p %d %B %Y'], format=None, allow_null=True,
         help_text='Accepted format is "12:01 PM 16 April 2019',
         style={'input_type': 'text', 'placeholder': '12:01 AM 28 July 2019'})
     sale_end = serializers.DateTimeField(
+        required=False,
         input_formats=['%I:%M %p %d %B %Y'], format=None, allow_null=True,
         help_text='Accepted format is "12:01 PM 16 April 2019',
         style={'input_type': 'text', 'placeholder': '12:01 AM 28 July 2019'})
@@ -73,7 +75,14 @@ class ProductSerializer(serializers.ModelSerializer):
             instance.description += b'; '.join(
                 validated_data['warranty'].readlines()
             ).decode()
-        return instance
+        return super().update(instance, validated_data)
+
+    # implement this method so we don't get the following error when testing
+    # the creation of a product:
+    # TypeError: Product() got an unexpected keyword argument 'warranty'
+    def create(self, validated_data):
+        validated_data.pop('warranty')
+        return super().create(validated_data)
 
 
 # In order to gather daily, weekly, or monthly product and shopping cart data
