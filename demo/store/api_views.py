@@ -1,8 +1,9 @@
 #!usr/bin/env python3
 from django.utils import timezone
 from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.exceptions import ValidationError
 from rest_framework.filters import SearchFilter
-from rest_framework.generics import ListAPIView
+from rest_framework.generics import ListAPIView, CreateAPIView
 from rest_framework.pagination import LimitOffsetPagination
 
 from store.models import Product
@@ -49,3 +50,19 @@ class ProductList(ListAPIView):
             return queryset.filter(sale_start__lte=now, sale_end__gte=now)
 
         return queryset
+
+
+class ProductCreate(CreateAPIView):
+    serializer_class = ProductSerializer
+
+    def create(self, request, *args, **kwargs):
+        # add the validation of the price for avoiding creating free products
+        price = self.request.data.get('price')
+
+        try:
+            if price is not None and float(price) <= 0.0:
+                raise ValidationError({'price': 'must be above $0.0'})
+        except ValueError:
+            raise ValidationError({'price': 'must to be a number'})
+
+        return super().create(request, *args, **kwargs)
