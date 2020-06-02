@@ -5,6 +5,8 @@
 * [Description](#description)
 * [Objectives](#objectives)
 * [Steps taken to setup the project](#steps-taken-to-setup-the-project)
+* [Using the Django shell](#using-the-django-shell)
+* [Using curl for testing the API](#using-curl-for-testing-the-api)
 * [Beyond the course activities](#beyond-the-course-activities)
 * [License](#license)
 
@@ -62,17 +64,24 @@ Example of using the django shell for rapid prototyping of a serializer class:
     >>> product = Product.objects.all()[0]
     >>> product
     <Product object (1) "Mineral Water Strawberry">
+    
     >>> from store.serializers import ProductSerializer
     >>> serializer = ProductSerializer()
     >>> data = serializer.to_representation(product)
     >>> data
     OrderedDict([('id', 1), ('name', 'Mineral Water Strawberry'), ('description', 'Natural-flavored strawberry with an anti-oxidant kick.'), ('price', 1.0), ('sale_start', None), ('sale_end', None), ('is_on_sale', False), ('current_price', 1.0)])
+    
     >>> from rest_framework.renderers import JSONRenderer
     >>> renderer = JSONRenderer()
     >>> renderer.render(data)
     b'{"id":1,"name":"Mineral Water Strawberry","description":"Natural-flavored strawberry with an anti-oxidant kick.","price":1.0,"sale_start":null,"sale_end":null,"is_on_sale":false,"current_price":1.0}'
     >>> 
     
+## Using curl for testing the API
+    (restful-django) ➜  demo git:(master) curl -X POST http://127.0.0.1:8000/api/v1/products/new -d price=1.00 -d name="product to delete" -d description="this is a test"
+    {"id":7,"name":"product to delete","description":"this is a test","price":1.0,"sale_start":null,"sale_end":null,"is_on_sale":false,"current_price":1.0}%                                             (restful-django) ➜  demo git:(master) curl -X DELETE http://127.0.0.1:8000/api/v1/products/7/destroy
+    
+    (restful-django) ➜  demo git:(master) curl -X GET http://127.0.0.1:8000/api/v1/products/7/destroy
 
 ## Beyond the course activities
 Things that I added/modified which weren't part of the course:
