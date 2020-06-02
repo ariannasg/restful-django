@@ -1,4 +1,4 @@
-[[![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE.md)
+[![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE.md)
 
 # RESTful Web APIs with Django - Course
 
@@ -9,10 +9,6 @@
 
 ## Description
 Create a simple RESTful web API using Django by following the course https://www.linkedin.com/learning/building-restful-web-apis-with-django.
-
-Follow the course to practice creating a brand-new Django project, defining a data model and fields, querying the 
-database, and using the framework's built-in URL handlers, views, and templates to structure the rest of the back end. 
-Also, practice how to incorporate CSS and JavaScript to enhance the style and usability of the Django templates.
 
 ## Objectives
 Practicing Django by:
