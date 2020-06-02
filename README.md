@@ -5,6 +5,7 @@
 * [Description](#description)
 * [Objectives](#objectives)
 * [Steps taken to setup the project](#steps-taken-to-setup-the-project)
+* [Beyond the course activities](#beyond-the-course-activities)
 * [License](#license)
 
 ## Description
@@ -47,6 +48,12 @@ Practicing Django by:
    ```
 - Checked http://127.0.0.1:8000/
 - Checked http://127.0.0.1:8000/admin using the super user credentials
+
+## Beyond the course activities
+Things that I added/modified which weren't part of the course:
+
+- Upgraded version of packages used
+- Installed deps and changed config to use PostgreSQL instead of SQLite
   
 ## License
 This project is licensed under the terms of the MIT License.
