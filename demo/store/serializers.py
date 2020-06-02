@@ -1,6 +1,12 @@
 from rest_framework import serializers
 
-from store.models import Product
+from store.models import Product, ShoppingCartItem
+
+
+class CartItemSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ShoppingCartItem
+        fields = ('product', 'quantity')
 
 
 class ProductSerializer(serializers.ModelSerializer):
@@ -12,8 +18,20 @@ class ProductSerializer(serializers.ModelSerializer):
     # override the description field by adding some props to it for adding
     # validation
     description = serializers.CharField(min_length=2, max_length=100)
+    # The SerializerMethodField will by default call the method get_cart_items
+    # For other fields, it will use the Get "underscore" as a prefix to the
+    # field name.
+    cart_items = serializers.SerializerMethodField()
 
     class Meta:
         model = Product
         fields = ('id', 'name', 'description', 'price',
-                  'sale_start', 'sale_end', 'is_on_sale', 'current_price')
+                  'sale_start', 'sale_end', 'is_on_sale', 'current_price',
+                  'cart_items')
+
+    def get_cart_items(self, instance):
+        items = ShoppingCartItem.objects.filter(product=instance)
+        # the "many" parameter is used to control whether one cart item is
+        # serialized or whether a list serializer is automatically created
+        # to serialize a collection of cart items.
+        return CartItemSerializer(items, many=True).data

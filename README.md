@@ -76,6 +76,42 @@ Example of using the django shell for rapid prototyping of a serializer class:
     >>> renderer.render(data)
     b'{"id":1,"name":"Mineral Water Strawberry","description":"Natural-flavored strawberry with an anti-oxidant kick.","price":1.0,"sale_start":null,"sale_end":null,"is_on_sale":false,"current_price":1.0}'
     >>> 
+ 
+Another example for using the serializer to show model relationships:
+    
+    (restful-django) ➜  demo git:(master) ✗ python3 manage.py shell
+    
+    Python 3.8.3 (v3.8.3:6f8c8320e9, May 13 2020, 16:29:34) 
+    [Clang 6.0 (clang-600.0.57)] on darwin
+    Type "help", "copyright", "credits" or "license" for more information.
+    (InteractiveConsole)
+    >>> import json
+    >>> from store.models import *
+    >>> from store.serializers import *
+    >>> product = Product.objects.all().first()
+    >>> cart = ShoppingCart()
+    >>> cart.save()
+    >>> item = ShoppingCartItem(shopping_cart=cart, product=product, quantity=5)
+    >>> item.save()
+    >>> serializer = ProductSerializer(product)
+    >>> print(json.dumps(serializer.data, indent=2))
+    {
+      "id": 1,
+      "name": "Mineral Water Strawberry",
+      "description": "Natural-flavored strawberry with an anti-oxidant kick.",
+      "price": 1.0,
+      "sale_start": null,
+      "sale_end": null,
+      "is_on_sale": false,
+      "current_price": 1.0,
+      "cart_items": [
+        {
+          "product": 1,
+          "quantity": 5
+        }
+      ]
+    }
+    >>> 
     
 ## Using curl for testing the API
     (restful-django) ➜  demo git:(master) curl -X POST http://127.0.0.1:8000/api/v1/products/new -d price=1.00 -d name="product to delete" -d description="this is a test"
