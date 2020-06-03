@@ -1,3 +1,4 @@
+[![CI Workflow](https://github.com/ariannasg/restful-django/workflows/CI%20Workflow/badge.svg)](https://github.com/ariannasg/restful-django/actions?query=workflow%3A%22CI+Workflow%22)
 [![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE.md)
 
 # RESTful Web APIs with Django - Course
@@ -125,6 +126,11 @@ Things that I added/modified which weren't part of the course:
 
 - Upgraded version of packages used
 - Installed deps and changed config to use PostgreSQL instead of SQLite
+- Installed safety and pylint for running security checks and linting
+- Created a config file for pylint and added some extra setup
+- Created a makefile with the basic commands to run locally and during CI/CD
+- Configured a test database
+- Configured a CI workflow for using github-actions
   
 ## License
 This project is licensed under the terms of the MIT License.
