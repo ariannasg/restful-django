@@ -72,7 +72,6 @@ class ProductUpdateTestCase(APITestCase):
             os.remove(updated.photo.path)
 
 
-@skip('Currently getting DETAIL:  Key (id)=(1) already exists.')
 class ProductCreateTestCase(APITestCase):
     def test_create_product(self):
         initial_product_count = Product.objects.count()
@@ -86,8 +85,6 @@ class ProductCreateTestCase(APITestCase):
 
         if response.status_code != 201:
             print(response.data)
-
-        assert response.status_code == 200
 
         # check the product count
         self.assertEqual(
