@@ -21,10 +21,10 @@ jobs:
     - name: Install dependencies
       run:
         pip install --upgrade pip
-        make install
+        pip install -r requirements.txt
     - name: Run security checks
-      run: make security
+      run: safety check
     - name: Run linting
-      run: make lint
+      run: cd demo && pylint demo store --rcfile=pylint.rc
     - name: Run all tests
-      run: make test
+      run: cd demo && python3 manage.py test
