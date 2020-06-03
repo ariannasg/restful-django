@@ -1,5 +1,4 @@
 import os
-from unittest import skip
 
 from django.conf import settings
 from rest_framework.test import APITestCase
