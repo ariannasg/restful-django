@@ -131,6 +131,7 @@ Things that I added/modified which weren't part of the course:
 - Created a makefile with the basic commands to run locally and during CI/CD
 - Configured a test database
 - Configured a CI workflow for using github-actions
+- Installed the coverage package, created a config file for it and and added commands to the makefile for generating test coverage
   
 ## License
 This project is licensed under the terms of the MIT License.
