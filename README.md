@@ -132,6 +132,7 @@ Things that I added/modified which weren't part of the course:
 - Configured a test database
 - Configured a CI workflow for using github-actions
 - Installed the coverage package, created a config file for it and and added commands to the makefile for generating test coverage
+- Configured project to use pipenv
   
 ## License
 This project is licensed under the terms of the MIT License.
