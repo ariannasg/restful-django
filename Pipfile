@@ -8,6 +8,7 @@ mock = "*"
 pylint = "*"
 safety = "*"
 coverage = "*"
+mypy = "*"
 
 [packages]
 djangorestframework = "*"
