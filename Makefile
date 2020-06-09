@@ -26,7 +26,7 @@ coverage-report:
 
 .PHONY: lint
 lint:
-	cd $(PROJECT_NAME) && pipenv run mypy --config-file mypy.ini . \
+	cd $(PROJECT_NAME) && pipenv run mypy --config-file=.mypy.ini . \
 	&& pylint $(PROJECT_NAME) $(APP_NAME) --rcfile=.pylintrc
 
 .PHONY: security
