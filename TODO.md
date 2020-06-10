@@ -1,0 +1,2 @@
+- [ ] Run mypy on github-actions
+- [ ] Improve Makefile to certain run commands at a project root level

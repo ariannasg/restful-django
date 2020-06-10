@@ -9,6 +9,7 @@
 * [Using the Django shell](#using-the-django-shell)
 * [Using curl for testing the API](#using-curl-for-testing-the-api)
 * [Beyond the course activities](#beyond-the-course-activities)
+* [TODOs](#todos)
 * [License](#license)
 
 ## Description
@@ -134,6 +135,9 @@ Things that I added/modified which weren't part of the course:
 - Installed the coverage package, created a config file for it and and added commands to the makefile for generating test coverage
 - Configured project to use pipenv
 - Configured project to use mypy for type checking
+
+## TODOs
+Please see list of [TODOs](TODO.md).
   
 ## License
 This project is licensed under the terms of the MIT License.

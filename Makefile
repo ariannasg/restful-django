@@ -24,10 +24,14 @@ coverage-report:
 	$(MAKE) coverage
 	cd $(PROJECT_NAME) && pipenv run coverage report
 
+.PHONY: typing
+typing:
+	cd $(PROJECT_NAME) && pipenv run mypy --config-file=.mypy.ini .
+
 .PHONY: lint
 lint:
-	cd $(PROJECT_NAME) && pipenv run mypy --config-file=.mypy.ini . \
-	&& pylint $(PROJECT_NAME) $(APP_NAME) --rcfile=.pylintrc
+	cd $(PROJECT_NAME) && pipenv run \
+	pylint $(PROJECT_NAME) $(APP_NAME) --rcfile=.pylintrc
 
 .PHONY: security
 security:
